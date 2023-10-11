@@ -1,11 +1,10 @@
-package com.stacker4.whopper.thirdparty.aws.s3
+package com.stacker4.whopper.thirdparty.aws.s3.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConstructorBinding
-@ConfigurationProperties(prefix = "cloud.aws.credentials")
+@ConfigurationProperties("cloud.aws.s3")
 class S3Properties(
-    val accessKey: String,
-    val secretKey: String
+    val bucket: String
 )
