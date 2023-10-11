@@ -1,14 +1,18 @@
-package com.stacker4.whopper.global.security.jwt.property
+package com.stacker4.whopper.global.security.token.jwt.property
 
 import io.jsonwebtoken.security.Keys
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.ConstructorBinding
 import java.nio.charset.StandardCharsets
 import java.security.Key
 
+@ConstructorBinding
+@ConfigurationProperties(prefix = "jwt")
 class JwtProperties(
     accessSecret: String,
     refreshSecret: String,
-    val accessExpiration: Int,
-    val refreshExpiration: Int
+    val accessExp: Int,
+    val refreshExp: Int
 ) {
 
     val accessSecret: Key = Keys.hmacShaKeyFor(accessSecret.toByteArray(StandardCharsets.UTF_8))
