@@ -11,9 +11,7 @@ import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class ExceptionFilter(
-
-) : OncePerRequestFilter() {
+class ExceptionFilter : OncePerRequestFilter() {
 
     private val log = LoggerFactory.getLogger(this.javaClass)
 
