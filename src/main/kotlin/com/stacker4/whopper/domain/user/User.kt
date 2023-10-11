@@ -11,4 +11,5 @@ class User(
 
     @Column(nullable = false, unique = true)
     val password: String
+
 )
