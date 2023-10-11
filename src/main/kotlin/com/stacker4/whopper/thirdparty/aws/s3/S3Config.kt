@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class AwsS3Config(
+class S3Config(
     private val awsProperties: AwsProperties
 ) {
     @Value("\${cloud.aws.region.static}")

@@ -1,4 +1,4 @@
-package com.stacker4.whopper.common
+package com.stacker4.whopper.common.security
 
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder

@@ -1,6 +1,6 @@
 package com.stacker4.whopper.domain.auth.service
 
-import com.stacker4.whopper.common.SecurityUtil
+import com.stacker4.whopper.common.security.SecurityUtil
 import com.stacker4.whopper.domain.auth.presentation.data.request.SignUpRequest
 import com.stacker4.whopper.domain.user.User
 import com.stacker4.whopper.domain.user.constant.Role

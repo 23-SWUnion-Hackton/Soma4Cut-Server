@@ -1,6 +1,6 @@
 package com.stacker4.whopper.domain.auth.service
 
-import com.stacker4.whopper.common.SecurityUtil
+import com.stacker4.whopper.common.security.SecurityUtil
 import com.stacker4.whopper.domain.auth.presentation.data.request.SignInRequest
 import com.stacker4.whopper.domain.auth.presentation.data.response.TokenResponse
 import com.stacker4.whopper.domain.user.exception.PasswordNotMatchException
