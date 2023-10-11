@@ -12,8 +12,7 @@ class FilterConfig(
     private val jwtTokenParser: JwtTokenParser
 ) : SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
     override fun configure(builder: HttpSecurity) {
-        builder.addFilterBefore(JwtRequestFilter(jwtTokenParser
-        ), UsernamePasswordAuthenticationFilter::class.java)
+        builder.addFilterBefore(JwtRequestFilter(jwtTokenParser), UsernamePasswordAuthenticationFilter::class.java)
         builder.addFilterBefore(ExceptionFilter(), JwtRequestFilter::class.java)
     }
 }

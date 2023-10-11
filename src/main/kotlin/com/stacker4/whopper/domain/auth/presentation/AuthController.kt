@@ -17,12 +17,12 @@ class AuthController(
     private val signUpService: SignUpService,
     private val signInService: SignInService
 ) {
-    @PostMapping
+    @PostMapping("/sign-up")
     fun signUp(signUpRequest: SignUpRequest): ResponseEntity<Void> =
         signUpService.execute(signUpRequest)
             .let { ResponseEntity.status(HttpStatus.NO_CONTENT).build() }
 
-    @PostMapping
+    @PostMapping("/sign-in")
     fun signIn(signInRequest: SignInRequest): ResponseEntity<TokenResponse> =
         signInService.execute(signInRequest)
             .let { ResponseEntity.ok(it) }
