@@ -12,10 +12,10 @@ import java.util.UUID
 class UploadImageService(
     private val awsS3Util: AwsS3Util
 ) {
-    fun execute(images: List<MultipartFile>) {
+    fun execute(images: List<MultipartFile>): List<String> {
         val allowedExtensions = listOf("jpeg", "jpg", "png")
 
-        images.map {
+        return images.map {
             val fileExtension = it.originalFilename?.substringAfterLast(".","")?.lowercase()
 
             if (fileExtension !in allowedExtensions)
