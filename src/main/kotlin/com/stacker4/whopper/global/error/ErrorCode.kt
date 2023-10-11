@@ -13,5 +13,8 @@ enum class ErrorCode(
 
     // user
     USER_NOT_FOUND("존재하지 않는 유저입니다.", 404),
-    PASSWORD_NOT_MATCH("비밀번호가 일치하지 않습니다.", 400)
+    PASSWORD_NOT_MATCH("비밀번호가 일치하지 않습니다.", 400),
+
+    // image
+    NOT_VALID_EXTENSION("유효하지 않은 확장자입니다.", 400)
 }
