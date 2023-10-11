@@ -1,5 +1,6 @@
 package com.stacker4.whopper.domain.user
 
+import com.stacker4.whopper.domain.user.constant.Role
 import org.hibernate.annotations.GenericGenerator
 import java.util.UUID
 import javax.persistence.*
@@ -17,6 +18,10 @@ class User(
     val name: String,
 
     @Column(nullable = false)
-    val password: String
+    val password: String,
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    val role: Role
 
 )
