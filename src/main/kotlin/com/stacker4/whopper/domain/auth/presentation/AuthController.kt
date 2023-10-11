@@ -1,6 +1,8 @@
 package com.stacker4.whopper.domain.auth.presentation
 
+import com.stacker4.whopper.domain.auth.presentation.data.request.SignInRequest
 import com.stacker4.whopper.domain.auth.presentation.data.request.SignUpRequest
+import com.stacker4.whopper.domain.auth.presentation.data.response.TokenResponse
 import com.stacker4.whopper.domain.auth.service.SignInService
 import com.stacker4.whopper.domain.auth.service.SignUpService
 import org.springframework.http.HttpStatus
@@ -19,4 +21,9 @@ class AuthController(
     fun signUp(signUpRequest: SignUpRequest): ResponseEntity<Void> =
         signUpService.execute(signUpRequest)
             .let { ResponseEntity.status(HttpStatus.NO_CONTENT).build() }
+
+    @PostMapping
+    fun signIn(signInRequest: SignInRequest): ResponseEntity<TokenResponse> =
+        signInService.execute(signInRequest)
+            .let { ResponseEntity.ok(it) }
 }
