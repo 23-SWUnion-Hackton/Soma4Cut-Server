@@ -3,7 +3,7 @@ package com.stacker4.whopper.domain.auth.presentation.data.request
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 
-data class SignUpRequest(
+data class SignInRequest(
     @field:Size(min = 1, max = 10)
     val name: String,
 

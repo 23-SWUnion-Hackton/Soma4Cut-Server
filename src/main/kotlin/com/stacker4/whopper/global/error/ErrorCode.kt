@@ -12,5 +12,6 @@ enum class ErrorCode(
     FORBIDDEN("Forbidden", 403),
 
     // user
-    USER_NOT_FOUND("존재하지 않는 유저입니다.", 404)
+    USER_NOT_FOUND("존재하지 않는 유저입니다.", 404),
+    PASSWORD_NOT_MATCH("비밀번호가 일치하지 않습니다.", 400)
 }
