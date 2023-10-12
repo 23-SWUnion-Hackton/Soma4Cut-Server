@@ -16,5 +16,6 @@ enum class ErrorCode(
     PASSWORD_NOT_MATCH("비밀번호가 일치하지 않습니다.", 400),
 
     // image
-    NOT_VALID_EXTENSION("유효하지 않은 확장자입니다.", 400)
+    NOT_VALID_EXTENSION("유효하지 않은 확장자입니다.", 400),
+    FAILED_CONVERT_IMAGE("이미지 변환에 실패하였습니다.", 400)
 }

@@ -14,9 +14,9 @@ spring:
         default_batch_fetch_size: 1000
 
   datasource:
-    url: jdbc:mysql://${DB_URL:localhost:3306}/${DB_NAME}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://${DB_URL:localhost:3306}/${DB_NAME:soma4cut}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:123456789a@}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   servlet:

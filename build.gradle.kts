@@ -34,8 +34,8 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.2")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE")
-
-	implementation("org.apache.httpcomponents:httpclient")
+	implementation(group = "commons-fileupload", name = "commons-fileupload", version = "1.4")
+	implementation(group = "commons-io", name = "commons-io", version = "2.4")
 }
 
 tasks.withType<KotlinCompile> {
