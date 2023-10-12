@@ -7,6 +7,8 @@ import com.stacker4.whopper.domain.image.service.QueryAllImageService
 import com.stacker4.whopper.domain.image.service.QueryImageByCodeService
 import com.stacker4.whopper.domain.image.service.UploadImageService
 import com.stacker4.whopper.domain.image.service.UploadImagesService
+import com.stacker4.whopper.domain.user.service.UploadCodeAtSpaceService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,7 +24,8 @@ class UserController(
     private val uploadImageService: UploadImageService,
     private val uploadImagesService: UploadImagesService,
     private val queryImageByCodeService: QueryImageByCodeService,
-    private val queryAllImageService: QueryAllImageService
+    private val queryAllImageService: QueryAllImageService,
+    private val uploadCodeAtSpaceService: UploadCodeAtSpaceService
 ) {
     @PostMapping("/image/complete")
     fun uploadImage(@RequestPart("image") image: MultipartFile): ResponseEntity<UploadImageResponse> =
@@ -46,4 +49,9 @@ class UserController(
     fun queryAllImage(): ResponseEntity<List<QueryAllImageResponse>> =
         queryAllImageService.execute()
             .let { ResponseEntity.ok(it) }
+
+    @PostMapping("/soma-space/{code}")
+    fun uploadCodeAtSpace(@PathVariable code: String): ResponseEntity<Void> =
+        uploadCodeAtSpaceService.execute(code)
+            .let { ResponseEntity.status(HttpStatus.CREATED).build() }
 }
