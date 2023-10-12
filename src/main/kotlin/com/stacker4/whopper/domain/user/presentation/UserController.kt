@@ -14,7 +14,7 @@ class UserController(
     private val uploadImageService: UploadImageService
 ) {
     @PostMapping("/image")
-    fun uploadImage(@RequestPart images: List<MultipartFile>): ResponseEntity<List<String>> =
-        uploadImageService.execute(images)
+    fun uploadImage(@RequestPart("image") image: MultipartFile): ResponseEntity<String> =
+        uploadImageService.execute(image)
             .let { ResponseEntity.ok(it) }
 }

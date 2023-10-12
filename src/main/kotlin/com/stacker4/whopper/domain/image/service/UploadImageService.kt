@@ -25,46 +25,43 @@ class UploadImageService(
         const val size = "auto"
     }
 
-    fun execute(images: List<MultipartFile>): List<String> {
+    fun execute(image: MultipartFile): String {
         val restTemplate = RestTemplate()
         val allowedExtensions = listOf("jpeg", "jpg", "png")
+        val fileExtension = image.originalFilename?.substringAfterLast(".","")?.lowercase()
 
-        return images.map {
-            val fileExtension = it.originalFilename?.substringAfterLast(".","")?.lowercase()
+        if (fileExtension !in allowedExtensions)
+            throw NotValidExtensionException()
 
-            if (fileExtension !in allowedExtensions)
-                throw NotValidExtensionException()
+        val fileName = UUID.randomUUID().toString() + ".$fileExtension"
 
-            val fileName = UUID.randomUUID().toString() + ".$fileExtension"
+        val headers = HttpHeaders()
+        headers.set(header, apiKey)
+        headers.contentType = MediaType.APPLICATION_JSON
 
-            val headers = HttpHeaders()
-            headers.set(header, apiKey)
-            headers.contentType = MediaType.APPLICATION_JSON
+        val requestBody = """
+            {
+                "image_url": "https://soma-4cut.s3.ap-northeast-2.amazonaws.com/" + $fileName,
+                "size": "$size",
+                "type": "auto",
+                "type_level": "1",
+                "format": "auto",
+                "roi": "0% 0% 100% 100%",
+                "crop": false,
+                "crop_margin": "0",
+                "scale": "original",
+                "position": "original",
+                "channels": "rgba",
+                "add_shadow": false,
+                "semitransparency": true,
+                "bg_color": "",
+                "bg_image_url": ""
+            }
+        """.trimIndent()
 
-            val requestBody = """    
-                {
-                    "image_url": "https://soma-4cut.s3.ap-northeast-2.amazonaws.com/" + $fileName,
-                    "size": "$size",
-                    "type": "auto",
-                    "type_level": "1",
-                    "format": "auto",
-                    "roi": "0% 0% 100% 100%",
-                    "crop": false,
-                    "crop_margin": "0",
-                    "scale": "original",
-                    "position": "original",
-                    "channels": "rgba",
-                    "add_shadow": false,
-                    "semitransparency": true,
-                    "bg_color": "",
-                    "bg_image_url": ""
-                }
-            """.trimIndent()
-
-            val requestEntity = HttpEntity(requestBody, headers)
-            val responseEntity = restTemplate.postForObject(apiUrl, requestEntity, ByteArray::class.java) ?: throw FailedConvertImage()
-            awsS3Util.uploadImage(byteArrayToMultipartFile(responseEntity, fileName), fileName)
-        }
+        val requestEntity = HttpEntity(requestBody, headers)
+        val responseEntity = restTemplate.postForObject(apiUrl, requestEntity, ByteArray::class.java) ?: throw FailedConvertImage()
+        return awsS3Util.uploadImage(byteArrayToMultipartFile(responseEntity, fileName), fileName)
     }
 
     private fun byteArrayToMultipartFile(byteArray: ByteArray, fileName: String): MultipartFile {
