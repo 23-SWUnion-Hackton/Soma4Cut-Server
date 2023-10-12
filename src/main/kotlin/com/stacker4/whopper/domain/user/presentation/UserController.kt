@@ -8,6 +8,7 @@ import com.stacker4.whopper.domain.image.service.QueryImageByCodeService
 import com.stacker4.whopper.domain.image.service.UploadImageService
 import com.stacker4.whopper.domain.image.service.UploadImagesService
 import com.stacker4.whopper.domain.user.presentation.data.response.QueryCodeSpaceResponse
+import com.stacker4.whopper.domain.user.presentation.data.response.SuccessUploadCodeAtSpaceResponse
 import com.stacker4.whopper.domain.user.service.QueryCodeSpaceService
 import com.stacker4.whopper.domain.user.service.UploadCodeAtSpaceService
 import org.springframework.http.HttpStatus
@@ -54,9 +55,9 @@ class UserController(
             .let { ResponseEntity.ok(it) }
 
     @PostMapping("/soma-space/{code}")
-    fun uploadCodeAtSpace(@PathVariable code: String): ResponseEntity<Void> =
+    fun uploadCodeAtSpace(@PathVariable code: String): ResponseEntity<SuccessUploadCodeAtSpaceResponse> =
         uploadCodeAtSpaceService.execute(code)
-            .let { ResponseEntity.status(HttpStatus.CREATED).build() }
+            .let { ResponseEntity.ok(it) }
 
     @GetMapping("/soma-space")
     fun queryCodeSpace(): ResponseEntity<List<QueryCodeSpaceResponse>> =
