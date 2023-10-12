@@ -11,7 +11,8 @@ class WebMvcConfig : WebMvcConfigurer {
             .allowedMethods("GET", "POST", "PUT", "PATCH", "HEAD", "DELETE", "OPTIONS")
             .allowedOrigins(
                 "http://localhost:3000",
-                "https://29fa-211-180-159-197.ngrok-free.app"
+                "https://soma-4cut.s3.ap-northeast-2.amazonaws.com",
+                "https://e6ed-2001-2d8-6ad9-881-c03b-b67b-d840-2988.ngrok-free.app"
             )
             .allowCredentials(true)
     }
