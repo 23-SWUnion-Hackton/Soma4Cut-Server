@@ -31,8 +31,8 @@ spring:
 jwt:
   accessSecret: ${JWT_ACCESS:c3RhY2tlcjR3aG9wcGVyc3RhY2tlcjR3aG9wcGVyc3RhY2tlcjR3aG9wcGVy}
   refreshSecret: ${JWT_REFRESH:c29tYTRjdXQ=c29tYTRjdXQ=c29tYTRjdXQ=c29tYTRjdXQ=}
-  accessExp: ${ACCESS_EXP:600}
-  refreshExp: ${REFRESH_EXP:7200}
+  accessExp: ${ACCESS_EXP:10000}
+  refreshExp: ${REFRESH_EXP:10000}
 
 cloud:
   aws:

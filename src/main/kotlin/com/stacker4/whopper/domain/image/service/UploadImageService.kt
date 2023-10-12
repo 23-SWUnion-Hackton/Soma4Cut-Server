@@ -34,10 +34,10 @@ class UploadImageService(
 
         val fileName = RandomStringUtils.random(8, true, true)
 
-        val imageUrl = awsS3Util.uploadImage(image, fileName)
+        awsS3Util.uploadImage(image, fileName)
         imageRepository.save(Image(
             id = 0,
-            name = imageUrl,
+            name = fileName,
             createdAt = LocalDateTime.now(),
             user = userRepository.findByIdOrNull(securityUtil.getCurrentUserId()) ?: throw UserNotFoundException()
         ))

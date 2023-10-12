@@ -34,7 +34,7 @@ class UploadImagesService(
 ) {
     companion object {
         const val apiUrl = "https://api.remove.bg/v1.0/removebg"
-        const val apiKey = "jvYhBixErqHc9KsSgSytuvcd"
+        const val apiKey = "AXttUhbpj4EEorbPctHRudrM"
         const val header = "X-Api-Key"
         const val size = "auto"
     }
@@ -76,10 +76,10 @@ class UploadImagesService(
             val requestEntity = HttpEntity(requestBody, headers)
             val responseEntity = restTemplate.postForObject(apiUrl, requestEntity, ByteArray::class.java) ?: throw FailedConvertImage()
             awsS3Util.deleteImage(fileName)
-            val imageUrl = awsS3Util.uploadImage(byteArrayToMultipartFile(responseEntity, fileName), fileName)
+            awsS3Util.uploadImage(byteArrayToMultipartFile(responseEntity, fileName), fileName)
             imageRepository.save(Image(
                 id = 0,
-                name = imageUrl,
+                name = fileName,
                 createdAt = LocalDateTime.now(),
                 user = userRepository.findByIdOrNull(securityUtil.getCurrentUserId()) ?: throw UserNotFoundException()
             ))
