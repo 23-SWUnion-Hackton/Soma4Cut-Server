@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
+import java.time.LocalDateTime
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
@@ -41,6 +42,7 @@ class UploadImagesService(
         val restTemplate = RestTemplate()
         val allowedExtensions = listOf("jpeg", "jpg", "png")
         val fileName = RandomStringUtils.random(8, true, true)
+
         images.map {
             val fileExtension = it.originalFilename?.substringAfterLast(".","")?.lowercase()
 
@@ -74,11 +76,11 @@ class UploadImagesService(
             val requestEntity = HttpEntity(requestBody, headers)
             val responseEntity = restTemplate.postForObject(apiUrl, requestEntity, ByteArray::class.java) ?: throw FailedConvertImage()
             awsS3Util.deleteImage(fileName)
-            awsS3Util.uploadImage(byteArrayToMultipartFile(responseEntity, fileName), fileName)
-
+            val imageUrl = awsS3Util.uploadImage(byteArrayToMultipartFile(responseEntity, fileName), fileName)
             imageRepository.save(Image(
                 id = 0,
-                name = fileName,
+                name = imageUrl,
+                createdAt = LocalDateTime.now(),
                 user = userRepository.findByIdOrNull(securityUtil.getCurrentUserId()) ?: throw UserNotFoundException()
             ))
         }
