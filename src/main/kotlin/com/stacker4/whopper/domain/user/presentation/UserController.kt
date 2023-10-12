@@ -1,6 +1,8 @@
 package com.stacker4.whopper.domain.user.presentation
 
+import com.stacker4.whopper.domain.image.dto.response.UploadImageResponse
 import com.stacker4.whopper.domain.image.service.UploadImageService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,8 +15,8 @@ import org.springframework.web.multipart.MultipartFile
 class UserController(
     private val uploadImageService: UploadImageService
 ) {
-    @PostMapping("/image")
-    fun uploadImage(@RequestPart("image") image: MultipartFile): ResponseEntity<String> =
+    @PostMapping("/image/complete")
+    fun uploadImage(@RequestPart("image") image: MultipartFile): ResponseEntity<UploadImageResponse> =
         uploadImageService.execute(image)
-            .let { ResponseEntity.ok(it) }
+            .let { ResponseEntity.status(HttpStatus.OK).body(it) }
 }

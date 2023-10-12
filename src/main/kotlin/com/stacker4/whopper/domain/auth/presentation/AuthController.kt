@@ -2,6 +2,7 @@ package com.stacker4.whopper.domain.auth.presentation
 
 import com.stacker4.whopper.domain.auth.presentation.data.request.SignInRequest
 import com.stacker4.whopper.domain.auth.presentation.data.request.SignUpRequest
+import com.stacker4.whopper.domain.auth.presentation.data.response.SuccessSignUp
 import com.stacker4.whopper.domain.auth.presentation.data.response.TokenResponse
 import com.stacker4.whopper.domain.auth.service.SignInService
 import com.stacker4.whopper.domain.auth.service.SignUpService
@@ -20,9 +21,9 @@ class AuthController(
     private val signInService: SignInService
 ) {
     @PostMapping("/sign-up")
-    fun signUp(@RequestBody @Valid signUpRequest: SignUpRequest): ResponseEntity<Void> =
+    fun signUp(@RequestBody @Valid signUpRequest: SignUpRequest): ResponseEntity<SuccessSignUp> =
         signUpService.execute(signUpRequest)
-            .let { ResponseEntity.status(HttpStatus.NO_CONTENT).build() }
+            .let { ResponseEntity.status(HttpStatus.CREATED).body(it) }
 
     @PostMapping("/sign-in")
     fun signIn(@RequestBody @Valid signInRequest: SignInRequest): ResponseEntity<TokenResponse> =

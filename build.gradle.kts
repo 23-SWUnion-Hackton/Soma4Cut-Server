@@ -36,6 +36,13 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE")
 	implementation(group = "commons-fileupload", name = "commons-fileupload", version = "1.4")
 	implementation(group = "commons-io", name = "commons-io", version = "2.4")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
+	implementation(platform("software.amazon.awssdk:bom:2.20.56"))
+	implementation("software.amazon.awssdk:s3")
+	implementation("software.amazon.awssdk:sso")
+	implementation("software.amazon.awssdk:ssooidc")
+	implementation("org.apache.commons:commons-lang3:3.0")
+
 }
 
 tasks.withType<KotlinCompile> {
