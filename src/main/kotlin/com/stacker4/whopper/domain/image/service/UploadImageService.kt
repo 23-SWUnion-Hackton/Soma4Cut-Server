@@ -51,7 +51,7 @@ class UploadImageService(
             user = user
         ))
 
-        val code = codeRepository.findByName(fileName) ?: throw CodeNotFoundException()
+        val code = codeRepository.findByName(codeName) ?: throw CodeNotFoundException()
 
         imageRepository.save(Image(
             id = 0,
@@ -61,6 +61,6 @@ class UploadImageService(
             code = code
         ))
 
-        return UploadImageResponse(fileName)
+        return UploadImageResponse(codeName)
     }
 }
