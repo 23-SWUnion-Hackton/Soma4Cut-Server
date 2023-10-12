@@ -1,10 +1,10 @@
 package com.stacker4.whopper.domain.code.presentation
 
 import com.stacker4.whopper.domain.code.presentation.data.request.QueryCodeByCodeRequest
+import com.stacker4.whopper.domain.code.presentation.data.request.SaveCodeRequest
 import com.stacker4.whopper.domain.code.presentation.data.response.QueryAllCodeResponse
 import com.stacker4.whopper.domain.code.presentation.data.response.QueryCodeByCodeNameResponse
 import com.stacker4.whopper.domain.code.presentation.data.response.SuccessSaveCodeResponse
-import com.stacker4.whopper.domain.code.service.DeleteCodeService
 import com.stacker4.whopper.domain.code.service.QueryAllCodeService
 import com.stacker4.whopper.domain.code.service.QueryCodeByCodeNameService
 import com.stacker4.whopper.domain.code.service.SaveCodeService
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/code")
 class CodeController(
     private val queryAllCodeService: QueryAllCodeService,
-    private val deleteCodeService: DeleteCodeService,
     private val queryCodeByCodeNameService: QueryCodeByCodeNameService,
     private val saveCodeService: SaveCodeService
 ) {
@@ -31,18 +30,13 @@ class CodeController(
         queryAllCodeService.execute()
             .let { ResponseEntity.ok(it) }
 
-    @DeleteMapping
-    fun deleteCode(@RequestBody code: String): ResponseEntity<Void> =
-        deleteCodeService.execute(code)
-            .let { ResponseEntity.status(HttpStatus.NO_CONTENT).build() }
-
     @GetMapping("/{code}")
     fun queryCodeByCodeName(@PathVariable("code") queryCodeByCodeRequest: QueryCodeByCodeRequest): ResponseEntity<QueryCodeByCodeNameResponse> =
         queryCodeByCodeNameService.execute(queryCodeByCodeRequest)
             .let { ResponseEntity.ok(it) }
 
     @PostMapping
-    fun saveCode(@RequestBody code: String): ResponseEntity<SuccessSaveCodeResponse> =
-        saveCodeService.execute(code)
+    fun saveCode(@RequestBody saveCodeRequest: SaveCodeRequest): ResponseEntity<SuccessSaveCodeResponse> =
+        saveCodeService.execute(saveCodeRequest)
             .let { ResponseEntity.ok(it) }
 }

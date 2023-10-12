@@ -1,7 +1,6 @@
 package com.stacker4.whopper.domain.code
 
 import com.stacker4.whopper.domain.code.constant.Space
-import com.stacker4.whopper.domain.image.Image
 import com.stacker4.whopper.domain.user.User
 import java.time.LocalDateTime
 import javax.persistence.*
