@@ -1,12 +1,18 @@
 package com.stacker4.whopper.domain.image.service
 
 import com.stacker4.whopper.common.aws.AwsS3Util
+import com.stacker4.whopper.common.security.SecurityUtil
+import com.stacker4.whopper.domain.image.Image
 import com.stacker4.whopper.domain.image.dto.request.RemoveBgRequest
 import com.stacker4.whopper.domain.image.dto.response.UploadImageResponse
 import com.stacker4.whopper.domain.image.exception.FailedConvertImage
 import com.stacker4.whopper.domain.image.exception.NotValidExtensionException
+import com.stacker4.whopper.domain.image.repository.ImageRepository
 import com.stacker4.whopper.domain.image.util.ImageUtil
+import com.stacker4.whopper.domain.user.exception.UserNotFoundException
+import com.stacker4.whopper.domain.user.repository.UserRepository
 import org.apache.commons.lang3.RandomStringUtils
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -20,24 +26,26 @@ import java.io.ByteArrayInputStream
 @Transactional(rollbackFor = [Exception::class])
 class UploadImagesService(
     private val awsS3Util: AwsS3Util,
-    private val imageUtil: ImageUtil
+    private val imageUtil: ImageUtil,
+    private val imageRepository: ImageRepository,
+    private val securityUtil: SecurityUtil,
+    private val userRepository: UserRepository
 ) {
     companion object {
         const val apiUrl = "https://api.remove.bg/v1.0/removebg"
-        const val apiKey = "Z43jY6rcURUzYk8euKqRcKAu"
+        const val apiKey = "jvYhBixErqHc9KsSgSytuvcd"
         const val header = "X-Api-Key"
         const val size = "auto"
     }
-    fun execute(images: List<MultipartFile>): List<UploadImageResponse> {
+    fun execute(images: List<MultipartFile>): UploadImageResponse {
         val restTemplate = RestTemplate()
         val allowedExtensions = listOf("jpeg", "jpg", "png")
-        return images.map {
+        val fileName = RandomStringUtils.random(8, true, true)
+        images.map {
             val fileExtension = it.originalFilename?.substringAfterLast(".","")?.lowercase()
 
             if (fileExtension !in allowedExtensions)
                 throw NotValidExtensionException()
-
-            val fileName = RandomStringUtils.random(8, true, true)
 
             awsS3Util.uploadImage(it, fileName)
 
@@ -68,8 +76,13 @@ class UploadImagesService(
             awsS3Util.deleteImage(fileName)
             awsS3Util.uploadImage(byteArrayToMultipartFile(responseEntity, fileName), fileName)
 
-            UploadImageResponse(fileName)
+            imageRepository.save(Image(
+                id = 0,
+                name = fileName,
+                user = userRepository.findByIdOrNull(securityUtil.getCurrentUserId()) ?: throw UserNotFoundException()
+            ))
         }
+        return UploadImageResponse(fileName)
     }
 
     private fun byteArrayToMultipartFile(byteArray: ByteArray, fileName: String): MultipartFile {
