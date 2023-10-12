@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface CodeRepository : JpaRepository<Code, Long> {
     fun findAllByUser(user: User): List<Code>
+    fun findByName(name: String): Code?
 }

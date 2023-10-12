@@ -4,5 +4,6 @@ import java.time.LocalDateTime
 
 data class QueryAllCodeResponse(
     val code: String,
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+    val image: String
 )
