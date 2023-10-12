@@ -41,7 +41,7 @@ class UploadImageService(
 
         val requestBody = """
             {
-                "image_url": "https://soma-4cut.s3.ap-northeast-2.amazonaws.com/" + $fileName,
+                "image_url": "https://soma-4cut.s3.ap-northeast-2.amazonaws.com/" + "$fileName",
                 "size": "$size",
                 "type": "auto",
                 "type_level": "1",
