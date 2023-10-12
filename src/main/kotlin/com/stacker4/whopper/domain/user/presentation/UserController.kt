@@ -1,7 +1,9 @@
 package com.stacker4.whopper.domain.user.presentation
 
+import com.stacker4.whopper.domain.image.dto.response.QueryAllImageResponse
 import com.stacker4.whopper.domain.image.dto.response.QueryImageByCodeResponse
 import com.stacker4.whopper.domain.image.dto.response.UploadImageResponse
+import com.stacker4.whopper.domain.image.service.QueryAllImageService
 import com.stacker4.whopper.domain.image.service.QueryImageByCodeService
 import com.stacker4.whopper.domain.image.service.UploadImageService
 import com.stacker4.whopper.domain.image.service.UploadImagesService
@@ -19,7 +21,8 @@ import org.springframework.web.multipart.MultipartFile
 class UserController(
     private val uploadImageService: UploadImageService,
     private val uploadImagesService: UploadImagesService,
-    private val queryImageByCodeService: QueryImageByCodeService
+    private val queryImageByCodeService: QueryImageByCodeService,
+    private val queryAllImageService: QueryAllImageService
 ) {
     @PostMapping("/image/complete")
     fun uploadImage(@RequestPart("image") image: MultipartFile): ResponseEntity<UploadImageResponse> =
@@ -37,5 +40,10 @@ class UserController(
     @GetMapping("/image/{code}")
     fun queryImageByCode(@PathVariable code: String): ResponseEntity<QueryImageByCodeResponse> =
         queryImageByCodeService.execute(code)
+            .let { ResponseEntity.ok(it) }
+
+    @GetMapping("/image/all")
+    fun queryAllImage(): ResponseEntity<List<QueryAllImageResponse>> =
+        queryAllImageService.execute()
             .let { ResponseEntity.ok(it) }
 }
