@@ -11,7 +11,7 @@ class WebMvcConfig : WebMvcConfigurer {
             .allowedMethods("GET", "POST", "PUT", "PATCH", "HEAD", "DELETE", "OPTIONS")
             .allowedOrigins(
                 "http://localhost:3000",
-                "https://632a-211-180-159-197.ngrok-free.app"
+                "https://29fa-211-180-159-197.ngrok-free.app"
             )
             .allowCredentials(true)
     }

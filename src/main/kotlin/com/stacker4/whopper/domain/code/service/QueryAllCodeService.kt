@@ -3,6 +3,7 @@ package com.stacker4.whopper.domain.code.service
 import com.stacker4.whopper.common.security.SecurityUtil
 import com.stacker4.whopper.domain.code.presentation.data.response.QueryAllCodeResponse
 import com.stacker4.whopper.domain.code.repository.CodeRepository
+import com.stacker4.whopper.domain.image.Image
 import com.stacker4.whopper.domain.image.exception.ImageNotFoundException
 import com.stacker4.whopper.domain.image.repository.ImageRepository
 import com.stacker4.whopper.domain.user.exception.UserNotFoundException
@@ -22,12 +23,12 @@ class QueryAllCodeService(
     fun execute(): List<QueryAllCodeResponse> {
         val user = userRepository.findByIdOrNull(securityUtil.getCurrentUserId()) ?: throw UserNotFoundException()
 
-        return codeRepository.findAllByUser(user).map {
-            val image = imageRepository.findByIdOrNull(it.image.id) ?: throw ImageNotFoundException()
+        return codeRepository.findAllByUser(user).map { code ->
+            val imageNames = imageRepository.findAllByCode(code).map { it.name }
             QueryAllCodeResponse(
-                code = it.name,
-                createdAt = it.createdAt,
-                image = image.name
+                code = code.name,
+                createdAt = code.createdAt,
+                image = imageNames
             )
         }
     }

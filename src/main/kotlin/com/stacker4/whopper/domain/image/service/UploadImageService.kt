@@ -3,6 +3,8 @@ package com.stacker4.whopper.domain.image.service
 import com.stacker4.whopper.common.aws.AwsS3Util
 import com.stacker4.whopper.common.security.SecurityUtil
 import com.stacker4.whopper.domain.code.Code
+import com.stacker4.whopper.domain.code.constant.Space
+import com.stacker4.whopper.domain.code.exception.CodeNotFoundException
 import com.stacker4.whopper.domain.code.repository.CodeRepository
 import com.stacker4.whopper.domain.image.Image
 import com.stacker4.whopper.domain.image.dto.response.UploadImageResponse
@@ -37,24 +39,25 @@ class UploadImageService(
         if (fileExtension !in allowedExtensions)
             throw NotValidExtensionException()
 
-        val fileName = RandomStringUtils.random(8, true, true)
+        val fileName = RandomStringUtils.random(8, true, true) + ".$fileExtension"
         val imgUrl = awsS3Util.uploadImage(image, fileName)
-
-        imageRepository.save(Image(
-            id = 0,
-            name = imgUrl,
-            createdAt = LocalDateTime.now(),
-            user = user
-        ))
-
-        val image = imageRepository.findByName(imgUrl) ?: throw ImageNotFoundException()
 
         codeRepository.save(Code(
             id = 0,
             name = fileName,
             createdAt = LocalDateTime.now(),
+            space = Space.NOT_SPACE,
+            user = user
+        ))
+
+        val code = codeRepository.findByName(fileName) ?: throw CodeNotFoundException()
+
+        imageRepository.save(Image(
+            id = 0,
+            name = imgUrl,
+            createdAt = LocalDateTime.now(),
             user = user,
-            image = image
+            code = code
         ))
 
         return UploadImageResponse(fileName)

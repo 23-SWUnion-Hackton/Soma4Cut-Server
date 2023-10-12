@@ -3,6 +3,7 @@ package com.stacker4.whopper.domain.image.service
 import com.stacker4.whopper.common.aws.AwsS3Util
 import com.stacker4.whopper.common.security.SecurityUtil
 import com.stacker4.whopper.domain.code.Code
+import com.stacker4.whopper.domain.code.constant.Space
 import com.stacker4.whopper.domain.code.repository.CodeRepository
 import com.stacker4.whopper.domain.image.Image
 import com.stacker4.whopper.domain.image.dto.request.RemoveBgRequest
@@ -48,9 +49,17 @@ class UploadImagesService(
         val code = RandomStringUtils.random(8, true, true)
         val user = userRepository.findByIdOrNull(securityUtil.getCurrentUserId()) ?: throw UserNotFoundException()
 
-        val saveImage = images.map {
-            val fileName = RandomStringUtils.random(8, true, true)
+        val codeEntity = codeRepository.save(Code(
+            id = 0,
+            name = code,
+            createdAt = LocalDateTime.now(),
+            space = Space.NOT_SPACE,
+            user = user
+        ))
+
+        images.map {
             val fileExtension = it.originalFilename?.substringAfterLast(".","")?.lowercase()
+            val fileName = RandomStringUtils.random(8, true, true) + ".$fileExtension"
 
             if (fileExtension !in allowedExtensions)
                 throw NotValidExtensionException()
@@ -90,19 +99,10 @@ class UploadImagesService(
                 id = 0,
                 name = imageUrl,
                 createdAt = LocalDateTime.now(),
-                user = user
+                user = user,
+                code = codeEntity
             ))
         }
-
-        val image = imageRepository.findByName(saveImage[1].name) ?: throw ImageNotFoundException()
-
-        codeRepository.save(Code(
-            id = 0,
-            name = code,
-            createdAt = LocalDateTime.now(),
-            user = user,
-            image = image
-        ))
 
         return UploadImageResponse(code)
     }

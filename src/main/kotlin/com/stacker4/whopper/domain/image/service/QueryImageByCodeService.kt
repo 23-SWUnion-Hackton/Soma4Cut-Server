@@ -1,7 +1,8 @@
 package com.stacker4.whopper.domain.image.service
 
+import com.stacker4.whopper.domain.code.exception.CodeNotFoundException
+import com.stacker4.whopper.domain.code.repository.CodeRepository
 import com.stacker4.whopper.domain.image.dto.response.QueryImageByCodeResponse
-import com.stacker4.whopper.domain.image.exception.ImageNotFoundException
 import com.stacker4.whopper.domain.image.repository.ImageRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -9,12 +10,16 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional(rollbackFor = [Exception::class], readOnly = true)
 class QueryImageByCodeService(
-    private val imageRepository: ImageRepository
+    private val imageRepository: ImageRepository,
+    private val codeRepository: CodeRepository
 ) {
-    fun execute(code: String): QueryImageByCodeResponse {
-        val image = imageRepository.findByName("https://soma-4cut.s3.ap-northeast-2.amazonaws.com/$code") ?: throw ImageNotFoundException()
-        return QueryImageByCodeResponse(
-            image.name
-        )
+    fun execute(code: String): List<QueryImageByCodeResponse> {
+        val code = codeRepository.findByName(code) ?: throw CodeNotFoundException()
+
+        return imageRepository.findAllByCode(code).map {
+            QueryImageByCodeResponse(
+                it.name
+            )
+        }
     }
 }

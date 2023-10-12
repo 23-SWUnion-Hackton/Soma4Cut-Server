@@ -1,5 +1,6 @@
 package com.stacker4.whopper.domain.image
 
+import com.stacker4.whopper.domain.code.Code
 import com.stacker4.whopper.domain.user.User
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -19,6 +20,10 @@ class Image(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    val user: User
+    val user: User,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "code_id")
+    val code: Code
 
 )

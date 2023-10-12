@@ -38,7 +38,7 @@ class UserController(
             .let { ResponseEntity.ok(it) }
 
     @GetMapping("/image/{code}")
-    fun queryImageByCode(@PathVariable code: String): ResponseEntity<QueryImageByCodeResponse> =
+    fun queryImageByCode(@PathVariable code: String): ResponseEntity<List<QueryImageByCodeResponse>> =
         queryImageByCodeService.execute(code)
             .let { ResponseEntity.ok(it) }
 

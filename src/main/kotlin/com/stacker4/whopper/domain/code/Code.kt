@@ -1,12 +1,13 @@
 package com.stacker4.whopper.domain.code
 
+import com.stacker4.whopper.domain.code.constant.Space
 import com.stacker4.whopper.domain.image.Image
 import com.stacker4.whopper.domain.user.User
 import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-class Code(
+data class Code(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
@@ -17,9 +18,10 @@ class Code(
     @Column(nullable = false, updatable = false, columnDefinition = "DATETIME(6)")
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    val user: User,
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    val space: Space,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    val image: Image
+    val user: User
 )
