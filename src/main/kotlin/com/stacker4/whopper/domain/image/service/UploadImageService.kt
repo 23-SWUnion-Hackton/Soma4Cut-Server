@@ -39,7 +39,7 @@ class UploadImageService(
         if (fileExtension !in allowedExtensions)
             throw NotValidExtensionException()
 
-        val fileName = RandomStringUtils.random(8, true, true) + ".$fileExtension"
+        val fileName = RandomStringUtils.random(8, true, true)
         val imgUrl = awsS3Util.uploadImage(image, fileName)
 
         codeRepository.save(Code(

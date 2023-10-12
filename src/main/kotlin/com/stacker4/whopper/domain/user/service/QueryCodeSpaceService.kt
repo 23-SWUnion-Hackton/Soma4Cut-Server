@@ -14,12 +14,9 @@ class QueryCodeSpaceService(
     private val imageRepository: ImageRepository
 ) {
     fun execute(): List<QueryCodeSpaceResponse> {
-        return codeRepository.findAllBySpace(Space.SPACE).flatMap { code ->
-            imageRepository.findAllByCode(code).map {
-                QueryCodeSpaceResponse(
-                    name = it.name
-                )
-            }
+        return codeRepository.findAllBySpace(Space.SPACE).map { code ->
+            val imageName = imageRepository.findAllByCode(code).map { it.name }
+            QueryCodeSpaceResponse(imageName)
         }
     }
 }
