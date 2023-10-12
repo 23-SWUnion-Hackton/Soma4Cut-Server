@@ -8,6 +8,7 @@ import com.stacker4.whopper.domain.image.Image
 import com.stacker4.whopper.domain.image.dto.request.RemoveBgRequest
 import com.stacker4.whopper.domain.image.dto.response.UploadImageResponse
 import com.stacker4.whopper.domain.image.exception.FailedConvertImage
+import com.stacker4.whopper.domain.image.exception.ImageNotFoundException
 import com.stacker4.whopper.domain.image.exception.NotValidExtensionException
 import com.stacker4.whopper.domain.image.repository.ImageRepository
 import com.stacker4.whopper.domain.image.util.ImageUtil
@@ -93,7 +94,7 @@ class UploadImagesService(
             ))
         }
 
-        val image = imageRepository.findByName(saveImage[1].name)
+        val image = imageRepository.findByName(saveImage[1].name) ?: throw ImageNotFoundException()
 
         codeRepository.save(Code(
             id = 0,

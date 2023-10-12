@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(rollbackFor = [Exception::class], readOnly = true)
-class QueryImageByCode(
+class QueryImageByCodeService(
     private val imageRepository: ImageRepository
 ) {
     fun execute(code: String): QueryImageByCodeResponse {
