@@ -1,4 +1,4 @@
-package com.stacker4.whopper.domain.user.presentation.data.response
+package com.stacker4.whopper.domain.code.presentation.data.response
 
 import java.time.LocalDateTime
 

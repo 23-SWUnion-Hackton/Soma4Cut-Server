@@ -17,5 +17,6 @@ enum class ErrorCode(
 
     // image
     NOT_VALID_EXTENSION("유효하지 않은 확장자입니다.", 400),
-    FAILED_CONVERT_IMAGE("이미지 변환에 실패하였습니다.", 400)
+    FAILED_CONVERT_IMAGE("이미지 변환에 실패하였습니다.", 400),
+    IMAGE_NOT_FOUND("존재하지 않는 이미지입니다.", 404)
 }

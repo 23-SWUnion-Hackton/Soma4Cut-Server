@@ -1,17 +1,17 @@
-package com.stacker4.whopper.domain.user.service
+package com.stacker4.whopper.domain.code.service
 
-import com.stacker4.whopper.domain.user.presentation.data.response.QueryAllCodeResponse
-import com.stacker4.whopper.domain.image.repository.ImageRepository
+import com.stacker4.whopper.domain.code.presentation.data.response.QueryAllCodeResponse
+import com.stacker4.whopper.domain.code.repository.CodeRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(readOnly = true)
 class QueryAllCodeService(
-    private val imageRepository: ImageRepository
+    private val codeRepository: CodeRepository
 ) {
     fun execute(): List<QueryAllCodeResponse> =
-        imageRepository.findAll().map {
+        codeRepository.findAll().map {
             QueryAllCodeResponse(
                 code = it.name,
                 createdAt = it.createdAt

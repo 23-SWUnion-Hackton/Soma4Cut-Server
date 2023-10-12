@@ -2,6 +2,8 @@ package com.stacker4.whopper.domain.image.service
 
 import com.stacker4.whopper.common.aws.AwsS3Util
 import com.stacker4.whopper.common.security.SecurityUtil
+import com.stacker4.whopper.domain.code.Code
+import com.stacker4.whopper.domain.code.repository.CodeRepository
 import com.stacker4.whopper.domain.image.Image
 import com.stacker4.whopper.domain.image.dto.request.RemoveBgRequest
 import com.stacker4.whopper.domain.image.dto.response.UploadImageResponse
@@ -30,7 +32,8 @@ class UploadImagesService(
     private val imageUtil: ImageUtil,
     private val imageRepository: ImageRepository,
     private val securityUtil: SecurityUtil,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val codeRepository: CodeRepository
 ) {
     companion object {
         const val apiUrl = "https://api.remove.bg/v1.0/removebg"
@@ -41,9 +44,11 @@ class UploadImagesService(
     fun execute(images: List<MultipartFile>): UploadImageResponse {
         val restTemplate = RestTemplate()
         val allowedExtensions = listOf("jpeg", "jpg", "png")
-        val fileName = RandomStringUtils.random(8, true, true)
+        val code = RandomStringUtils.random(8, true, true)
+        val user = userRepository.findByIdOrNull(securityUtil.getCurrentUserId()) ?: throw UserNotFoundException()
 
-        images.map {
+        val saveImage = images.map {
+            val fileName = RandomStringUtils.random(8, true, true)
             val fileExtension = it.originalFilename?.substringAfterLast(".","")?.lowercase()
 
             if (fileExtension !in allowedExtensions)
@@ -75,16 +80,30 @@ class UploadImagesService(
 
             val requestEntity = HttpEntity(requestBody, headers)
             val responseEntity = restTemplate.postForObject(apiUrl, requestEntity, ByteArray::class.java) ?: throw FailedConvertImage()
+
             awsS3Util.deleteImage(fileName)
-            awsS3Util.uploadImage(byteArrayToMultipartFile(responseEntity, fileName), fileName)
+
+            val imageUrl = awsS3Util.uploadImage(byteArrayToMultipartFile(responseEntity, fileName), fileName)
+
             imageRepository.save(Image(
                 id = 0,
-                name = fileName,
+                name = imageUrl,
                 createdAt = LocalDateTime.now(),
-                user = userRepository.findByIdOrNull(securityUtil.getCurrentUserId()) ?: throw UserNotFoundException()
+                user = user
             ))
         }
-        return UploadImageResponse(fileName)
+
+        val image = imageRepository.findByName(saveImage[1].name)
+
+        codeRepository.save(Code(
+            id = 0,
+            name = code,
+            createdAt = LocalDateTime.now(),
+            user = user,
+            image = image
+        ))
+
+        return UploadImageResponse(code)
     }
 
     private fun byteArrayToMultipartFile(byteArray: ByteArray, fileName: String): MultipartFile {
