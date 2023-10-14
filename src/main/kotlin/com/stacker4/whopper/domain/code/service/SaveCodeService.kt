@@ -26,7 +26,7 @@ class SaveCodeService(
 ) {
     fun execute(saveCodeRequest: SaveCodeRequest): SuccessSaveCodeResponse {
         val user = userRepository.findByIdOrNull(securityUtil.getCurrentUserId()) ?: throw UserNotFoundException()
-        val code = codeRepository.findByName(saveCodeRequest.code) ?: throw CodeNotFoundException()
+        val code = codeRepository.findAllByName(saveCodeRequest.code) ?: throw CodeNotFoundException()
         val codeEntity = codeRepository.save(Code(
             id = 0,
             name = saveCodeRequest.code,
@@ -35,15 +35,26 @@ class SaveCodeService(
             user = user
         ))
 
-        imageRepository.findAllByCode(code).map {
-            imageRepository.save(Image(
-                id = 0,
-                name = it.name,
-                createdAt = LocalDateTime.now(),
-                user = user,
-                code = codeEntity
-            ))
+        code.map {
+            imageRepository.findAllByCode(it).map { image ->
+                imageRepository.save(Image(
+                    id = 0,
+                    name = image.name,
+                    createdAt = LocalDateTime.now(),
+                    user = user,
+                    code = codeEntity
+                ))
+            }
         }
+//        imageRepository.findAllByCode(code).map {
+//            imageRepository.save(Image(
+//                id = 0,
+//                name = it.name,
+//                createdAt = LocalDateTime.now(),
+//                user = user,
+//                code = codeEntity
+//            ))
+//        }
 
         return SuccessSaveCodeResponse(
             message = "코드 저장을 성공하였습니다.",

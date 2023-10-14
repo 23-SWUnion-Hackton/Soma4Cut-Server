@@ -11,7 +11,6 @@ import com.stacker4.whopper.domain.user.presentation.data.response.QueryCodeSpac
 import com.stacker4.whopper.domain.user.presentation.data.response.SuccessUploadCodeAtSpaceResponse
 import com.stacker4.whopper.domain.user.service.QueryCodeSpaceService
 import com.stacker4.whopper.domain.user.service.UploadCodeAtSpaceService
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -55,7 +54,7 @@ class UserController(
             .let { ResponseEntity.ok(it) }
 
     @PostMapping("/soma-space/{code}")
-    fun uploadCodeAtSpace(@PathVariable code: String): ResponseEntity<SuccessUploadCodeAtSpaceResponse> =
+    fun uploadCodeAtSpace(@PathVariable code: String): ResponseEntity<List<SuccessUploadCodeAtSpaceResponse>> =
         uploadCodeAtSpaceService.execute(code)
             .let { ResponseEntity.ok(it) }
 

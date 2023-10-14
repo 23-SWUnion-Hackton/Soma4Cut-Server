@@ -3,8 +3,6 @@ package com.stacker4.whopper.domain.code.service
 import com.stacker4.whopper.common.security.SecurityUtil
 import com.stacker4.whopper.domain.code.presentation.data.response.QueryAllCodeResponse
 import com.stacker4.whopper.domain.code.repository.CodeRepository
-import com.stacker4.whopper.domain.image.Image
-import com.stacker4.whopper.domain.image.exception.ImageNotFoundException
 import com.stacker4.whopper.domain.image.repository.ImageRepository
 import com.stacker4.whopper.domain.user.exception.UserNotFoundException
 import com.stacker4.whopper.domain.user.repository.UserRepository

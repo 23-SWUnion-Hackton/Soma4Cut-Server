@@ -8,9 +8,7 @@ import com.stacker4.whopper.domain.code.presentation.data.response.SuccessSaveCo
 import com.stacker4.whopper.domain.code.service.QueryAllCodeService
 import com.stacker4.whopper.domain.code.service.QueryCodeByCodeNameService
 import com.stacker4.whopper.domain.code.service.SaveCodeService
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping

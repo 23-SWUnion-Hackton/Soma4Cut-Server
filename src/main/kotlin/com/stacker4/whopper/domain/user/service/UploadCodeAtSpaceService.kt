@@ -12,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional
 class UploadCodeAtSpaceService(
     private val codeRepository: CodeRepository
 ) {
-    fun execute(code: String): SuccessUploadCodeAtSpaceResponse {
-        val codeEntity = codeRepository.findByName(code) ?: throw CodeNotFoundException()
-        codeRepository.save(codeEntity.copy(space = Space.SPACE))
-        return SuccessUploadCodeAtSpaceResponse(
-            message = "소마 스페이스에 이미지 업로드 성공",
-            status = 201
-        )
+    fun execute(code: String): List<SuccessUploadCodeAtSpaceResponse> {
+//        val codeEntity = codeRepository.findByName(code) ?: throw CodeNotFoundException()
+        return codeRepository.findAllByName(code).map {
+            codeRepository.save(it.copy(space = Space.SPACE))
+            SuccessUploadCodeAtSpaceResponse(
+                message = "소마 스페이스에 이미지 업로드 성공",
+                status = 201
+            )
+        }
     }
 }

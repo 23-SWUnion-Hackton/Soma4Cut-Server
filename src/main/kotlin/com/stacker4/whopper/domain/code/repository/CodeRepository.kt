@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface CodeRepository : JpaRepository<Code, Long> {
     fun findAllByUser(user: User): List<Code>
     fun findByName(name: String): Code?
+    fun findAllByName(name: String): List<Code>
     fun findAllBySpace(space: Space): List<Code>
 }

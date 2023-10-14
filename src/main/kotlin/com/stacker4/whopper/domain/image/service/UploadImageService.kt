@@ -8,10 +8,8 @@ import com.stacker4.whopper.domain.code.exception.CodeNotFoundException
 import com.stacker4.whopper.domain.code.repository.CodeRepository
 import com.stacker4.whopper.domain.image.Image
 import com.stacker4.whopper.domain.image.dto.response.UploadImageResponse
-import com.stacker4.whopper.domain.image.exception.ImageNotFoundException
 import com.stacker4.whopper.domain.image.exception.NotValidExtensionException
 import com.stacker4.whopper.domain.image.repository.ImageRepository
-import com.stacker4.whopper.domain.image.util.ImageUtil
 import com.stacker4.whopper.domain.user.exception.UserNotFoundException
 import com.stacker4.whopper.domain.user.repository.UserRepository
 import org.apache.commons.lang3.RandomStringUtils
@@ -25,7 +23,6 @@ import java.time.LocalDateTime
 @Transactional(rollbackFor = [Exception::class])
 class UploadImageService(
     private val awsS3Util: AwsS3Util,
-    private val imageUtil: ImageUtil,
     private val imageRepository: ImageRepository,
     private val securityUtil: SecurityUtil,
     private val userRepository: UserRepository,
@@ -42,6 +39,7 @@ class UploadImageService(
         val codeName = RandomStringUtils.random(8, true, true)
         val fileName = "$codeName.$fileExtension"
         val imgUrl = awsS3Util.uploadImage(image, fileName)
+        println(imgUrl)
 
         codeRepository.save(Code(
             id = 0,

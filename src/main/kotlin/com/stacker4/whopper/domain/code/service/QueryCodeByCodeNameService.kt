@@ -15,13 +15,19 @@ class QueryCodeByCodeNameService(
     private val imageRepository: ImageRepository
 ) {
     fun execute(queryCodeByCodeRequest: QueryCodeByCodeRequest): QueryCodeByCodeNameResponse {
-        val codeEntity = codeRepository.findByName(queryCodeByCodeRequest.code) ?: throw CodeNotFoundException()
-        val image = imageRepository.findAllByCode(codeEntity)
+        val codeEntity = codeRepository.findAllByName(queryCodeByCodeRequest.code) ?: throw CodeNotFoundException()
+        val response =  codeEntity.map {
+            val image = imageRepository.findAllByCodeName(it.name)
 
-        return QueryCodeByCodeNameResponse(
-            code = queryCodeByCodeRequest.code,
-            createdAt = codeEntity.createdAt,
-            image = image.map { it.name }
-        )
+            QueryCodeByCodeNameResponse(
+                code = it.name,
+                createdAt = it.createdAt,
+                image = image.map { image ->
+                    image.name
+                }
+            )
+        }
+
+        return response[0]
     }
 }
